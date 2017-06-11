@@ -21,7 +21,11 @@ automake --add-missing --copy
 
 autoconf
 
-./configure
+cd output
+
+../configure
 
 # then we can
 make && sudo make install
+
+cd -
