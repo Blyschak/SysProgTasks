@@ -1,3 +1,5 @@
 A completed task for home task#2
 
 Used autotools to generate Makefile for a little project
+
+autotools-cmds.sh - file with commands i used to scan project directory generate makefile and the compile
