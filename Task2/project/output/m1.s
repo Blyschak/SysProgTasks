@@ -2172,8 +2172,8 @@ foo:
 	.string	"_IOS_BIN 128"
 .LASF323:
 	.string	"__attribute_artificial__ __attribute__ ((__artificial__))"
-.LASF497:
-	.string	"_IO_IS_APPENDING 0x1000"
+.LASF567:
+	.string	"/home/stepan.blyschak/Documents/SysProgTasks/Task2/project"
 .LASF148:
 	.string	"__DBL_EPSILON__ ((double)2.22044604925031308085e-16L)"
 .LASF310:
@@ -2242,8 +2242,8 @@ foo:
 	.string	"_IO_LINE_BUF 0x200"
 .LASF356:
 	.string	"__stub_stty "
-.LASF43:
-	.string	"__INT64_TYPE__ long int"
+.LASF426:
+	.string	"__TIMER_T_TYPE void *"
 .LASF109:
 	.string	"__UINT64_C(c) c ## UL"
 .LASF273:
@@ -3024,6 +3024,8 @@ foo:
 	.string	"__OFF64_T_TYPE __SQUAD_TYPE"
 .LASF563:
 	.string	"sizetype"
+.LASF497:
+	.string	"_IO_IS_APPENDING 0x1000"
 .LASF524:
 	.string	"_IO_stdout ((_IO_FILE*)(&_IO_2_1_stdout_))"
 .LASF354:
@@ -3088,8 +3090,8 @@ foo:
 	.string	"unsigned char"
 .LASF516:
 	.string	"_IO_FIXED 010000"
-.LASF567:
-	.string	"/home/stepan/Documents/Task0/project"
+.LASF43:
+	.string	"__INT64_TYPE__ long int"
 .LASF394:
 	.string	"__U64_TYPE unsigned long int"
 .LASF503:
@@ -3222,8 +3224,6 @@ foo:
 	.string	"__INT_LEAST32_MAX__ 0x7fffffff"
 .LASF63:
 	.string	"__UINT_FAST64_TYPE__ long unsigned int"
-.LASF426:
-	.string	"__TIMER_T_TYPE void *"
 .LASF269:
 	.string	"__KERNEL_STRICT_NAMES"
 .LASF158:

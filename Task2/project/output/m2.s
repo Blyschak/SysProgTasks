@@ -914,8 +914,6 @@ main:
 	.string	"__UINT_LEAST32_MAX__ 0xffffffffU"
 .LASF22:
 	.string	"__SIZEOF_SIZE_T__ 8"
-.LASF204:
-	.string	"__GCC_ATOMIC_LONG_LOCK_FREE 2"
 .LASF65:
 	.string	"__UINTPTR_TYPE__ long unsigned int"
 .LASF30:
@@ -1200,14 +1198,16 @@ main:
 	.string	"__GCC_ATOMIC_CHAR_LOCK_FREE 2"
 .LASF60:
 	.string	"__UINT_FAST8_TYPE__ unsigned char"
+.LASF135:
+	.string	"__FLT_DENORM_MIN__ 1.40129846432481707092e-45F"
 .LASF57:
 	.string	"__INT_FAST16_TYPE__ long int"
 .LASF168:
 	.string	"__DEC32_MIN_EXP__ (-94)"
 .LASF88:
 	.string	"__INT32_MAX__ 0x7fffffff"
-.LASF246:
-	.string	"/home/stepan/Documents/Task0/project"
+.LASF154:
+	.string	"__LDBL_DIG__ 18"
 .LASF240:
 	.string	"__STDC_IEC_559__ 1"
 .LASF190:
@@ -1354,8 +1354,8 @@ main:
 	.string	"__code_model_small__ 1"
 .LASF153:
 	.string	"__LDBL_MANT_DIG__ 64"
-.LASF193:
-	.string	"__GCC_HAVE_SYNC_COMPARE_AND_SWAP_1 1"
+.LASF204:
+	.string	"__GCC_ATOMIC_LONG_LOCK_FREE 2"
 .LASF238:
 	.string	"__DECIMAL_BID_FORMAT__ 1"
 .LASF86:
@@ -1384,8 +1384,8 @@ main:
 	.string	"__UINT_LEAST8_TYPE__ unsigned char"
 .LASF43:
 	.string	"__INT64_TYPE__ long int"
-.LASF154:
-	.string	"__LDBL_DIG__ 18"
+.LASF193:
+	.string	"__GCC_HAVE_SYNC_COMPARE_AND_SWAP_1 1"
 .LASF247:
 	.string	"main"
 .LASF92:
@@ -1398,7 +1398,7 @@ main:
 	.string	"__DEC64_MIN__ 1E-383DD"
 .LASF142:
 	.string	"__DBL_MIN_10_EXP__ (-307)"
-.LASF135:
-	.string	"__FLT_DENORM_MIN__ 1.40129846432481707092e-45F"
+.LASF246:
+	.string	"/home/stepan.blyschak/Documents/SysProgTasks/Task2/project"
 	.ident	"GCC: (Ubuntu 5.4.0-6ubuntu1~16.04.4) 5.4.0 20160609"
 	.section	.note.GNU-stack,"",@progbits
