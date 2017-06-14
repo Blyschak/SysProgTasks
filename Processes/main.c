@@ -176,7 +176,7 @@ void create_by_fork()
   }
   else if ( child_PID < 0 )
   {
-  	/* print errno and error message */
+    /* print errno and error message */
     printf("Errno - %d", errno);
     perror("fork()");
     return ;
