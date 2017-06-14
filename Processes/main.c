@@ -7,6 +7,10 @@
 #include <string.h>
 
 #define SLEEP_TIME 50
+#define BUFFER_SIZE 256
+
+const char* sleep_arg = "--sleep";
+const char* program_name;
 
 /* variables for exit code, status and PID
  * of created child process */
@@ -28,12 +32,15 @@ void do_smth_important();
 int main(int argc,char **argv)
 {
 
+  /* save the program name */
+  program_name = argv[0];
+
   /* for system and execl.
    * system() and execl() will run this program
    * as a separate process with parametr 1
    * to run do_smth_important() function */
   if (argc > 1 && 
-  	( strcmp(argv[1],"1") == 0 ))
+  	( strcmp(argv[1],sleep_arg) == 0 ))
   {
   	do_smth_important();
   	exit(EXIT_SUCCESS);
@@ -76,6 +83,10 @@ void do_smth_important()
 
 void create_by_system()
 {
+  /* is needed for system()
+   * to generate command that will be sent 
+   * to shell to call this programm with --sleep */
+  char buffer[BUFFER_SIZE] = "";
   printf("\n%20s\n\n", "system()");
 
   /* creating process by system() function call */
@@ -83,14 +94,21 @@ void create_by_system()
 
   /* system() blocks the parent process until
    * the child process is finished */
-  if ( 0 != ( exit_code = system("./main 1") ) )
+
+  /* set to the buffer path to executable
+   * and concatate than with flag -s */
+  strncpy(buffer, program_name, BUFFER_SIZE);
+  /* add space to the command */
+  strcat(buffer, " ");
+
+  if ( 0 != ( exit_code = system(strcat(buffer, sleep_arg)) ))
   {
-    printf("%s\n","System() cannot create child process"
+    printf("%s\n","System() cannot create child process\n"
     	"or child process didn't successfuly finished");
   }
   else
   {
-    printf(
+    fprintf(stderr,
       "Process created by system has been finished; "
       "exit code - %d\n", exit_code);
   }
@@ -110,7 +128,10 @@ void create_by_execl()
       "This is child process by execl with PID - %d\n", 
       (int)getpid());
 
-    exit_code = execl("./main", "main", "1", NULL);
+    /*                path to         argv[0]    argv[1]
+     *                 executable
+     */
+    exit_code = execl(program_name, program_name, sleep_arg, NULL);
 
     /* execl returns only if an error has occured
      * while creating process */
@@ -128,19 +149,16 @@ void create_by_execl()
     printf("Errno - %d", errno);
     perror("fork()");
   }
-  else
-  {
 
-    /* parent process */
+  /* parent process */
 
-    /* here i don't use wait - 
-     * let the parent do the rest of the job
-     * and child run in the background */
+  /* here i don't use wait - 
+   * let the parent do the rest of the job
+   * and child run in the background */
 
-   printf("Execl process with PID - %d started\n", 
-    (int)child_PID);
+  printf("Execl process with PID - %d started\n", 
+  	(int)child_PID);
 
-  }
 }
 
 void create_by_fork()
@@ -171,7 +189,7 @@ void create_by_fork()
       if ( child_PID < 0 )
       {
         printf("Errno - %d", errno);
-        perror("");
+        perror("fork()");
       } 
       else
       {
