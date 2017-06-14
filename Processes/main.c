@@ -140,14 +140,16 @@ void create_by_execl()
     {
       printf("Errno - %d", errno);
       perror("execl()");
+      return ;
     }
 
   }
-  else if ( -1 == child_PID )
+  else if ( child_PID < 0 )
   {
     /* print errno and error message */
     printf("Errno - %d", errno);
     perror("fork()");
+    return ;
   }
 
   /* parent process */
@@ -172,6 +174,13 @@ void create_by_fork()
     do_smth_important();
     exit(EXIT_SUCCESS);
   }
+  else if ( child_PID < 0 )
+  {
+  	/* print errno and error message */
+    printf("Errno - %d", errno);
+    perror("fork()");
+    return ;
+  }
   else
   {
     /* parent process */
@@ -189,7 +198,8 @@ void create_by_fork()
       if ( child_PID < 0 )
       {
         printf("Errno - %d", errno);
-        perror("fork()");
+        perror("waitpid()");
+        return ;
       } 
       else
       {
