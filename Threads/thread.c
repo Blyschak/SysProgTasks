@@ -1,9 +1,9 @@
-#define _GNU_SOURCE
-
+#define _GNU_SOURCE /* needed by pthread_tryjoin_np() decalration */
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
 #include <limits.h>
+#undef _GNU_SOURCE
 
 /* function - a thread body */
 void* sum(void* max)
@@ -27,40 +27,44 @@ void* sum(void* max)
 int main(int argc, char **argv)
 {
 
+	/* Usage: 
+	 *./thread [NUMBER_OF_THREADS] [VALUE_1] .. [VALUE_N]
+	 */
+
 	if (argc < 3)
 	{
 		exit(1);
 	}
 
-	int n = atoi(argv[1]);
-	pthread_t* threads = (pthread_t*)malloc(n*sizeof(pthread_t));
-	void** stack_addr_bases = (void**)malloc(n*sizeof(void*));
+	int i; /* for loops counter */
 
+	/* get number of threads */
+	int n = atoi(argv[1]);
+
+	/* get input values into an array */
 	int* values = (int*)malloc(n*sizeof(int*));
 
+	/* the minimal stack size */
+	size_t thread_stack_size = PTHREAD_STACK_MIN;
 
-	for (int i = 0; i < n; ++i)
+	/* create an array of threads */
+	pthread_t* threads = (pthread_t*)malloc(n*sizeof(pthread_t));
+
+	/* an array of stack pointers for each thread */
+	void** stack_addr_bases = (void**)malloc(n*sizeof(void*));
+	for (i = 0; i < n; ++i)
 	{
 		values[i] = atoi(argv[i+2]);
 	}
 
+	/* thread attribute structure */
+	pthread_attr_t attr;
+	/* init by default */
+	pthread_attr_init(&attr);
 
-
-	size_t thread_stack_size = PTHREAD_STACK_MIN;
-
-	
-
-	for (int i = 0; i < n; ++i)
+	for (i = 0; i < n; ++i)
 	{
-
-		pthread_attr_t attr;
-		/* init by default */
-		pthread_attr_init(&attr);
-
-		//int max = atoi(argv[i+2]);
-
-		//printf("%s\n",argv[i+2]);
-
+		/* allocate memory for thread custom stacks */
 		stack_addr_bases[i] = (void*)malloc(thread_stack_size);
 
 		/* set custom stack to attributes */
@@ -75,71 +79,35 @@ int main(int argc, char **argv)
 		
 	}
 
+	/* counter for threads that are still running */
 	int thread_counter = n;
 
 	while (thread_counter)
 	{
-		for (int i = 0; i < n; ++i)
+		for (i = 0; i < n; ++i)
 		{
-			void* p_ret;
+			void* result;
 
-			
-
-			if ( 0 == pthread_tryjoin_np(threads[i], (void**)&p_ret) )
+			if ( 0 == pthread_tryjoin_np(threads[i], (void**)&result) )
 			{
-				printf("Sum returned - %ld\n", (long int)p_ret);
+				printf("Sum returned - %ld\n", (long int)result);
 				--thread_counter;
 			}
 
 		}
 	}
 
-	for (int i = 0; i < n; ++i)
+	/* free all allocated memory */
+	for (i = 0; i < n; ++i)
 	{
+		/* free all custom stacks */
 		free(stack_addr_bases[i]);
 	}
 
+	/* free threads, stack addreses and values arrays*/
 	free(threads);
 	free(stack_addr_bases);
 	free(values);
-
-
-	// long int max = atoi(argv[1]);
-	
-	// pthread_attr_t attr;
-	// pthread_t thread;
-
-	// /* for return value of a thread */
-	// void *p_ret = 0;
-
-	// /* init by default */
-	// pthread_attr_init(&attr);
-
-	// /* allocate my own stack using
-	//  * defined minimum stack size */
-	// size_t thread_stack_size = PTHREAD_STACK_MIN;
-	// void* stack_addr_base = (void*)malloc(thread_stack_size);
-
-	// /* set custom stack to attributes */
-	// if ( 0 != pthread_attr_setstack(&attr, stack_addr_base, thread_stack_size) )
-	// {
-	// 	perror("pthread_attr_setstacksize()");
-	// 	exit(1);
-	// }
-
-	// /* create new thread */
-	// pthread_create(&thread, &attr, sum, &max);
-
-	// /* wait thread to finish */
-	// //pthread_join(thread, (void**)&p_ret);
-
-
-	// while ( 0 != pthread_tryjoin_np(thread, (void**)&p_ret)) ;
-
-	// /* free this stack */
-	// free(stack_addr_base);
-
-	// printf("Sum returned - %ld\n", (long int)p_ret);
 
 	return 0;
 }

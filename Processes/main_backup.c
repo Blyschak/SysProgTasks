@@ -4,9 +4,11 @@
 #include <sys/wait.h>
 #include <unistd.h>
 #include <errno.h>
-#include <string.h>
 
-#define SLEEP_TIME 50
+#define SLEEP_TIME 5
+
+/* a bash cmd just for delay */
+const char* bash_delay = "sleep 500";
 
 /* variables for exit code, status and PID
  * of created child process */
@@ -14,63 +16,47 @@ int exit_code;
 int status;
 pid_t child_PID;
 
-/* test functions to create
- * a separate process using
- * system(), execl() and fork() */
 void create_by_system();
 void create_by_execl();
 void create_by_fork();
 
-/* a function for a child processes
- * to run */
+/* a function for a child process to run */
 void do_smth_important();
 
 int main(int argc,char **argv)
 {
 
-  /* for system and execl.
-   * system() and execl() will run this program
-   * as a separate process with parametr 1
-   * to run do_smth_important() function */
-  if (argc > 1 && 
-  	( strcmp(argv[1],"1") == 0 ))
-  {
-  	do_smth_important();
-  	exit(EXIT_SUCCESS);
-  }
+  /* print the parent program PID */
+  printf("Parent program PID - %d\n", (int)getpid());
 
-  /* print the parent process PID 
-   * of this process */
-  printf("Parent of parent program PID - %d\n", 
-  	(int)getppid());
-
-  /* print the parent process PID */
-  printf("Parent program PID - %d\n", 
-  	(int)getpid());
-
-  /* test this functions */
+  /********************************
+   *		system()
+   ********************************/
   create_by_system();
+  /********************************
+   *		execl()
+   ********************************/
+
   create_by_execl();
+  /********************************
+   *		fork()
+   ********************************/
+
   create_by_fork();
 
   /* daemonize program */
-
-  /* run a new session */
   setsid();
-  /* change pwd to / and redirect 
-   * all the output to /dev/null */
-  daemon(0, 0);
+  daemon(1, 1);
 
   /* endless work for a "daemon" */
   while (1) ;
   
-  return EXIT_SUCCESS;
+  return 0;
 }
 
 void do_smth_important()
 {
-  /* do something very usefull in a 
-   * separate process */
+  /* do something very usefull */
   sleep(SLEEP_TIME);
 }
 
@@ -80,17 +66,13 @@ void create_by_system()
 
   /* creating process by system() function call */
   printf("Starting process by system()\n");
-
-  /* system() blocks the parent process until
-   * the child process is finished */
-  if ( 0 != ( exit_code = system("./main 1") ) )
+  if ( 0 != ( exit_code = system(bash_delay) ) )
   {
-    printf("%s\n","System() cannot create child process"
-    	"or child process didn't successfuly finished");
+    printf("%s\n","System() cannot create child process");
   }
   else
   {
-    printf(
+  printf(
       "Process created by system has been finished; "
       "exit code - %d\n", exit_code);
   }
@@ -110,7 +92,8 @@ void create_by_execl()
       "This is child process by execl with PID - %d\n", 
       (int)getpid());
 
-    exit_code = execl("./main", "main", "1", NULL);
+    exit_code = execl("/bin/bash", "bash", "-c",
+     bash_delay, NULL);
 
     /* execl returns only if an error has occured
      * while creating process */
@@ -126,16 +109,16 @@ void create_by_execl()
   {
     /* print errno and error message */
     printf("Errno - %d", errno);
-    perror("fork()");
+    perror("fork");
   }
   else
   {
 
     /* parent process */
 
-    /* here i don't use wait - 
-     * let the parent do the rest of the job
-     * and child run in the background */
+
+    /* here i don't use wait
+     * let the parent do the rest of the job */
 
    printf("Execl process with PID - %d started\n", 
     (int)child_PID);
