@@ -6,6 +6,7 @@
 #define BOOL unsigned char
 #define TRUE 1
 #define FALSE 0
+#define SECOND 1000000
 
 int thread_flag;
 pthread_cond_t thread_flag_cv;
@@ -13,9 +14,10 @@ pthread_mutex_t thread_flag_mutex;
 
 void wait_n_secs(int seconds, BOOL show_output)
 {
-  for (int i = 1; i <= seconds; ++i)
+  int i;
+  for (i = 1; i <= seconds; ++i)
   {
-    usleep(1000000);
+    usleep(SECOND);
     if (show_output)
       printf("Second %d\n", i);
   }
@@ -26,7 +28,7 @@ void do_work()
   static int counter = 0;
   printf("do_work() counting %d\n", counter);
   ++counter;
-  usleep(1000000);
+  usleep(SECOND/3);
 }
 
 void initialize_flag() {
@@ -88,10 +90,10 @@ int main(int argc, char** argv)
   printf("Wait 5 seconds\n");
   wait_n_secs(5, TRUE);
   printf("Now a new thread will run with output\n"
-    "And after 10 seconds will be blocked\n");
+    "Press Enter to block the thread\n");
   set_thread_flag(1);
 
-  wait_n_secs(10, FALSE);
+  getchar();
   set_thread_flag(0);
 
   printf("Thread is blocked, so now we will "
