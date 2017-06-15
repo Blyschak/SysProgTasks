@@ -22,6 +22,7 @@ int main(int argc, char **argv)
 
 	if (argc < 2)
 	{
+		usage();
 		exit(EXIT_FAILURE);
 	}
 
@@ -58,7 +59,10 @@ int main(int argc, char **argv)
 	}
 
 	/* destroy attributes structure */
-	pthread_attr_destroy(&attr);
+	if ( 0 != (ret = pthread_attr_destroy(&attr)) )
+	{
+		HANDLE_ERROR(ret, "pthread_attr_destroy()");
+	}
 
 	/* free this stack */
 	free(stack_addr_base);
